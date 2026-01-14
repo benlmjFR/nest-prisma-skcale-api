@@ -17,7 +17,7 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   // READ ALL
-  findAll(page = 1, limit = 10) {
+  getAllUsers(page = 1, limit = 10) {
     return this.prisma.user.findMany({
       skip: (page - 1) * limit,
       take: limit,
@@ -26,12 +26,12 @@ export class UsersService {
   }
 
   // READ ONE
-  async findById(id: number) {
+  async getUser(id: number) {
     return this.findOrFail({ id });
   }
 
   // CREATE
-  create(data: Prisma.UserCreateInput) {
+  createUser(data: Prisma.UserCreateInput) {
     return this.prisma.user.create({
       data,
       select: publicUserSelect,
@@ -39,7 +39,7 @@ export class UsersService {
   }
 
   // UPDATE
-  async update(id: number, data: Prisma.UserUpdateInput) {
+  async updateUser(id: number, data: Prisma.UserUpdateInput) {
     await this.findOrFail({ id });
 
     return this.prisma.user.update({
@@ -50,7 +50,7 @@ export class UsersService {
   }
 
   // DELETE
-  async remove(id: number) {
+  async deleteUser(id: number) {
     await this.findOrFail({ id });
 
     return this.prisma.user.delete({
