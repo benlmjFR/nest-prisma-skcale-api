@@ -34,6 +34,12 @@ export class UsersService {
     return this.findOrFail({ id });
   }
 
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
   // CREATE
   async createUser(data: Prisma.UserCreateInput) {
     const existingUser = await this.prisma.user.findUnique({
@@ -104,6 +110,18 @@ export class UsersService {
         email: true,
       },
     });
+  }
+  async validateUser(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: publicUserSelect,
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   // PRIVATE
